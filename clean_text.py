@@ -25,14 +25,14 @@ def removeWhitespace(corpus):
 	corpus = re.sub("^( +)", "", corpus)
 	return corpus
 
-def removePeriodsAtEndOfMrMrs(corpus):
+def removeMrMrs(corpus):
 	# search for mr, mrs, etc for period removal
-	corpus = re.sub("[mM][rR][sS]?(.)", "", corpus)
+	corpus = re.sub("[mM][rR][sS]?.", "", corpus)
 	return corpus
 
 def removePunctuation(corpus):
 	#  remove commas, colons, dashes
-	corpus = re.sub("[;:_*]+", "", corpus)
+	corpus = re.sub("[;:_*\?!]+", "", corpus)
 	# change dashes to spaces
 	corpus = re.sub("-", " ", corpus)
 	return corpus
@@ -40,6 +40,7 @@ def removePunctuation(corpus):
 def removeFootnotes(corpus):
 	# remove all digits in square brackets [footnotes]
 	corpus = re.sub("\[\d+\]", '', corpus)
+	corpus = re.sub("[\[\]]", '', corpus)
 	return corpus
 
 def handleAndComp(corpus):
@@ -57,11 +58,12 @@ def putEachSentenceOnANewLine(corpus):
 def clean_text(corpus):
 	corpus = removeTitleAndChapterLines(corpus)
 	corpus = removeNewLineCharsAtEndOfEachLine(corpus)
-	corpus = removePeriodsAtEndOfMrMrs(corpus)
+	corpus = removeMrMrs(corpus)
 	corpus = removePunctuation(corpus)
 	corpus = removeWhitespace(corpus)
 	corpus = removeFootnotes(corpus)
 	corpus = handleAndComp(corpus)
+	corpus = putEachSentenceOnANewLine(corpus)
 	return corpus
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@ import re
 
 def removeRemainingPunctuation(text):
     # removes periods, commas, and parenthesis from corpus
-    text = re.sub("[.,()]", "", text)
+    text = re.sub("[.,()\"\']", "", text)
     return text
 
 def splitOnWhitespace(text):
@@ -10,7 +10,7 @@ def splitOnWhitespace(text):
 
 def tokenize(text):
     cleanedText = removeRemainingPunctuation(text)
-    tokens = splitOnWhitespace(text)
+    tokens = splitOnWhitespace(cleanedText)
     return tokens
 
 if __name__ == '__main__':
