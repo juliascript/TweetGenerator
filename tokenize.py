@@ -1,7 +1,8 @@
 import re
 
 def removeRemainingPunctuation(text):
-    text = re.sub(".", "", text)
+    # removes periods, commas, and parenthesis from corpus
+    text = re.sub("[.,()]", "", text)
     return text
 
 def splitOnWhitespace(text):
