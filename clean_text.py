@@ -2,63 +2,64 @@ import re
 
 def removeTitleAndChapterLines(corpus):
 	#  remove all lines that are written in all caps
-	corpus = re.sub("[A-Z]+\n", '', corpus)
+	editedCorpus = re.sub(r"[A-Z]+\n", '', corpus)
 	# re.sub("^[A-Z]+$", '')
 	# remove all lines that begin with a number and have alphanumeric words following
-	corpus = re.sub("\d+. ?[\w ]+.?", '', corpus)
+	editedCorpus = re.sub(r"\d+. ?[\w ]+.?", '', editedCorpus)
 	#  remove lines that have a number followed by a periods
-	corpus = re.sub("\d+. ?", '', corpus)
-	return corpus
+	editedCorpus = re.sub(r"\d+. ?", '', editedCorpus)
+	return editedCorpus
 
 def removeNewLineCharsAtEndOfEachLine(corpus):
 	# remove new lines
-	corpus = re.sub("\n", ' ', corpus)
-	return corpus
+	return re.sub(r"\n", ' ', corpus)
 
 def removeWhitespace(corpus):
 	# # remove empty lines
 	# corpus = re.sub("^\n$", '', corpus)
 
 	# replace double spaces with single spaces
-	corpus = re.sub ("  ", " ", corpus)
+	editedCorpus = re.sub(r" {2,}", " ", corpus)
 	# replace spaces before sentences begin on new lines -- not sure if this works 
-	corpus = re.sub("^( +)", "", corpus)
-	return corpus
+	editedCorpus = re.sub(r"^( +)", "", editedCorpus)
+	return editedCorpus
 
-def removeMrMrs(corpus):
+def removeTitles(corpus):
+	# Mx? 
 	# search for mr, mrs, etc for period removal
-	corpus = re.sub("[mM][rR][sS]?.", "", corpus)
-	return corpus
+	editedCorpus = re.sub(r"[mMdD][rR][sS]?\.", "", corpus)
+	editedCorpus = re.sub(r"[mMdD][xX]?\.", "", editedCorpus)
+	return editedCorpus
 
 def removePunctuation(corpus):
 	#  remove commas, colons, dashes
-	corpus = re.sub("[;:_*\?!]+", "", corpus)
+	editedCorpus = re.sub(r"[;:_*?!|\{\}]+", "", corpus)
 	# change dashes to spaces
-	corpus = re.sub("-", " ", corpus)
-	return corpus
+	editedCorpus = re.sub("-", " ", editedCorpus)
+	return editedCorpus
 
 def removeFootnotes(corpus):
 	# remove all digits in square brackets [footnotes]
-	corpus = re.sub("\[\d+\]", '', corpus)
-	corpus = re.sub("[\[\]]", '', corpus)
-	return corpus
+	editedCorpus = re.sub(r"\[\d+\]", '', corpus)
+	editedCorpus = re.sub(r"[\[\]]", '', editedCorpus)
+	return editedCorpus
 
 def handleAndComp(corpus):
 	# remove &c
-	corpus = re.sub("(&c)\b.", "", corpus)
+	editedCorpus = re.sub(r"(&c)\b\.", "", corpus)
 	# replace & with and
-	corpus = re.sub("&", "and", corpus)
-	return corpus
+	editedCorpus = re.sub("&", "and", editedCorpus)
+	return editedCorpus
 
+# should probably remove this 
 def putEachSentenceOnANewLine(corpus):
 	# split by . -- having a sentence per line
-	corpus = corpus.replace('.', '\n')
-	return corpus
+	return corpus.replace('.', '\n')
 
-def clean_text(corpus):
+def cleanText(corpus):
 	corpus = removeTitleAndChapterLines(corpus)
 	corpus = removeNewLineCharsAtEndOfEachLine(corpus)
-	corpus = removeMrMrs(corpus)
+	corpus = removeTitles(corpus)
 	corpus = removePunctuation(corpus)
 	corpus = removeWhitespace(corpus)
 	corpus = removeFootnotes(corpus)
@@ -70,8 +71,8 @@ if __name__ == "__main__":
 	import sys
 	if len(sys.argv) > 1:
 		filename = sys.argv[1]
-		f = open(filename)
-		f =  f.read()
-		print clean_text(f)
+		file_ = open(filename)
+		text =  file_.read()
+		print cleanText(text)
 	else:
 		print('No source text filename given as argument')
