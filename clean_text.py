@@ -55,6 +55,7 @@ def handleAndComp(corpus):
 def putEachSentenceOnANewLine(corpus):
 	# split by . -- having a sentence per line
 	return corpus.replace('.', '\n')
+	# return corpus.replace('. [A-Z]', '\n')
 
 def cleanText(corpus):
 	corpus = removeTitleAndChapterLines(corpus)
